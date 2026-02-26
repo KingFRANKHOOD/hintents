@@ -321,7 +321,7 @@ func BenchmarkValueGeneration(b *testing.B) {
 // BenchmarkEntryGeneration benchmarks complete entry generation
 func BenchmarkEntryGeneration(b *testing.B) {
 	config := &GeneratorConfig{
-		Count:      int64(b.N),
+		Count:      b.N,
 		OutputFile: "bench_entries.json",
 		Verbose:    false,
 	}

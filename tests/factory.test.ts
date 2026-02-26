@@ -1,6 +1,3 @@
-// Copyright (c) Hintents Authors.
-// SPDX-License-Identifier: Apache-2.0
-
 import { createAuditSigner } from '../src/audit/signing/factory';
 import { KmsEd25519Signer } from '../src/audit/signing/kmsSigner';
 

@@ -286,7 +286,6 @@ mod tests {
                 file: "test.rs".to_string(),
                 line: 42,
                 column: Some(10),
-                column_end: None,
             },
         );
 
@@ -354,7 +353,6 @@ mod tests {
                 file: "test.rs".to_string(),
                 line: 42,
                 column: Some(10),
-                column_end: None,
             },
         );
 

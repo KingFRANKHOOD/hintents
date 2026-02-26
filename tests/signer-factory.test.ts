@@ -1,6 +1,3 @@
-// Copyright (c) Hintents Authors.
-// SPDX-License-Identifier: Apache-2.0
-
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { KmsSigner } from "../src/audit/signing/kmsSigner";

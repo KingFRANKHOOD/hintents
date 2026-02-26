@@ -52,3 +52,4 @@ func TestResourceNotFoundError(t *testing.T) {
 		t.Fatalf("unexpected no-suggestion message: %q", got)
 	}
 }
+

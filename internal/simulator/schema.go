@@ -26,11 +26,10 @@ type SimulationRequest struct {
 	ProtocolVersion *uint32           `json:"protocol_version,omitempty"`
 	MockBaseFee     *uint32           `json:"mock_base_fee,omitempty"`
 	MockGasPrice    *uint64           `json:"mock_gas_price,omitempty"`
-	MemoryLimit     *uint64           `json:"memory_limit,omitempty"`
 
 	//New: restorePreamble for state restoration operations
 	RestorePreamble map[string]interface{} `json:"restore_preamble,omitempty"`
-
+	
 	AuthTraceOpts       *AuthTraceOptions      `json:"auth_trace_opts,omitempty"`
 	CustomAuthCfg       map[string]interface{} `json:"custom_auth_config,omitempty"`
 	ResourceCalibration *ResourceCalibration   `json:"resource_calibration,omitempty"`
@@ -81,7 +80,6 @@ type BudgetUsage struct {
 type SimulationResponse struct {
 	Status            string               `json:"status"` // "success" or "error"
 	Error             string               `json:"error,omitempty"`
-	ErrorCode         string               `json:"error_code,omitempty"`
 	Events            []string             `json:"events,omitempty"`            // Raw event strings (backward compatibility)
 	DiagnosticEvents  []DiagnosticEvent    `json:"diagnostic_events,omitempty"` // Structured diagnostic events
 	Logs              []string             `json:"logs,omitempty"`              // Host debug logs
@@ -112,10 +110,10 @@ type SecurityViolation struct {
 
 // SourceLocation represents a precise position in Rust/WASM source code.
 type SourceLocation struct {
-	File      string `json:"file"`
-	Line      uint   `json:"line"`
-	Column    uint   `json:"column"`
-	ColumnEnd *uint  `json:"column_end,omitempty"`
+	File      string  `json:"file"`
+	Line      uint    `json:"line"`
+	Column    uint    `json:"column"`
+	ColumnEnd *uint   `json:"column_end,omitempty"`
 }
 
 // Session represents a stored simulation result

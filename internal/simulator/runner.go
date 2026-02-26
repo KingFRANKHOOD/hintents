@@ -67,6 +67,7 @@ func NewRunnerWithMockTime(simPathOverride string, debug bool, mockTime int64) (
 	return r, nil
 }
 
+
 // -------------------- Binary Discovery --------------------
 
 func findSimBinary(simPathOverride string) (string, string, error) {
@@ -155,31 +156,9 @@ func getSandboxNativeTokenCap(req *SimulationRequest) *uint64 {
 	return nil
 }
 
-// getSimulatorMemoryLimit returns the effective simulator memory ceiling in bytes:
-// request field if set, otherwise env ERST_SIM_MEMORY_LIMIT_BYTES.
-func getSimulatorMemoryLimit(req *SimulationRequest) *uint64 {
-	if req != nil && req.MemoryLimit != nil {
-		return req.MemoryLimit
-	}
-	if v := os.Getenv("ERST_SIM_MEMORY_LIMIT_BYTES"); v != "" {
-		if n, err := strconv.ParseUint(v, 10, 64); err == nil {
-			return &n
-		}
-	}
-	return nil
-}
-
 // -------------------- Execution --------------------
 
 func (r *Runner) Run(req *SimulationRequest) (*SimulationResponse, error) {
-	if req == nil {
-		return nil, errors.NewSimErrorMsg(errors.CodeValidationFailed, "simulation request cannot be nil")
-	}
-
-	if req.MemoryLimit == nil {
-		req.MemoryLimit = getSimulatorMemoryLimit(req)
-	}
-
 	// Enforce sandbox native token cap when set (local/sandbox economic constraint)
 	if capStroops := getSandboxNativeTokenCap(req); capStroops != nil {
 		if err := EnforceSandboxNativeTokenCap(req.EnvelopeXdr, *capStroops); err != nil {
@@ -239,7 +218,7 @@ func (r *Runner) Run(req *SimulationRequest) (*SimulationResponse, error) {
 	// If the simulator returned a logical error inside the response payload,
 	// classify it into a unified ErstError before returning to the caller.
 	if resp.Error != "" {
-		classified := (&ipc.Error{Code: resp.ErrorCode, Message: resp.Error}).ToErstError()
+		classified := (&ipc.Error{Message: resp.Error}).ToErstError()
 		logger.Logger.Error("Simulator returned error",
 			"code", classified.Code,
 			"original", classified.OriginalError,

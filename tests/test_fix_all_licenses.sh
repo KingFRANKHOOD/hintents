@@ -1,6 +1,3 @@
-# Copyright (c) Hintents Authors.
-# SPDX-License-Identifier: Apache-2.0
-
 #!/usr/bin/env bash
 # tests/test_fix_all_licenses.sh
 # Unit tests for fix_all_licenses.sh

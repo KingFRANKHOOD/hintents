@@ -1,6 +1,3 @@
-// Copyright (c) Hintents Authors.
-// SPDX-License-Identifier: Apache-2.0
-
 // Example usage of generated TypeScript bindings
 import * as StellarSdk from '@stellar/stellar-sdk';
 
