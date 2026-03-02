@@ -63,7 +63,7 @@ jobs:
             sha256sum erst > erst.sha256
           fi
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: erst-${{ matrix.goos }}-${{ matrix.goarch }}-${{ matrix.os }}
           path: bin/*
