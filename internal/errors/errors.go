@@ -139,186 +139,186 @@ func (e *MissingLedgerKeyError) Is(target error) bool {
 // Wrap functions for consistent error wrapping
 func WrapTransactionNotFound(err error) error {
 	return &ErstError{
-		 Code:    ErstLedgerNotFound,
-		 Message: "transaction not found",
-		 OrigErr: err,
+		Code:    ErstLedgerNotFound,
+		Message: "transaction not found",
+		OrigErr: err,
 	}
 }
 
 func WrapRPCConnectionFailed(err error) error {
 	return &ErstError{
-		 Code:    ErstRPCConnectionFailed,
-		 Message: "RPC connection failed",
-		 OrigErr: err,
+		Code:    ErstRPCConnectionFailed,
+		Message: "RPC connection failed",
+		OrigErr: err,
 	}
 }
 
 func WrapSimulatorNotFound(msg string) error {
 	return &ErstError{
-		 Code:    ErstSimulatorNotFound,
-		 Message: msg,
+		Code:    ErstSimulatorNotFound,
+		Message: msg,
 	}
 }
 
 func WrapSimulationFailed(err error, stderr string) error {
 	return &ErstError{
-		 Code:    ErstSimulationFailed,
-		 Message: stderr,
-		 OrigErr: err,
+		Code:    ErstSimulationFailed,
+		Message: stderr,
+		OrigErr: err,
 	}
 }
 
 func WrapInvalidNetwork(network string) error {
 	return &ErstError{
-		 Code:    ErstInvalidNetwork,
-		 Message: network + ". Must be one of: testnet, mainnet, futurenet",
+		Code:    ErstInvalidNetwork,
+		Message: network + ". Must be one of: testnet, mainnet, futurenet",
 	}
 }
 
 func WrapMarshalFailed(err error) error {
 	return &ErstError{
-		 Code:    ErstValidationFailed,
-		 Message: "failed to marshal request",
-		 OrigErr: err,
+		Code:    ErstValidationFailed,
+		Message: "failed to marshal request",
+		OrigErr: err,
 	}
 }
 
 func WrapUnmarshalFailed(err error, output string) error {
 	return &ErstError{
-		 Code:    ErstValidationFailed,
-		 Message: output,
-		 OrigErr: err,
+		Code:    ErstValidationFailed,
+		Message: output,
+		OrigErr: err,
 	}
 }
 
 func WrapSimulationLogicError(msg string) error {
 	return &ErstError{
-		 Code:    ErstSimulationLogicError,
-		 Message: msg,
+		Code:    ErstSimulationLogicError,
+		Message: msg,
 	}
 }
 
 func WrapRPCTimeout(err error) error {
 	return &ErstError{
-		 Code:    ErstRPCTimeout,
-		 Message: "RPC request timed out",
-		 OrigErr: err,
+		Code:    ErstRPCTimeout,
+		Message: "RPC request timed out",
+		OrigErr: err,
 	}
 }
 
 func WrapAllRPCFailed() error {
 	return &ErstError{
-		 Code:    ErstAllRPCFailed,
-		 Message: "all RPC endpoints failed",
+		Code:    ErstAllRPCFailed,
+		Message: "all RPC endpoints failed",
 	}
 }
 
 func WrapRPCError(url string, msg string, code int) error {
 	return &ErstError{
-		 Code:    ErstRPCError,
-		 Message: fmt.Sprintf("from %s: %s (code %d)", url, msg, code),
+		Code:    ErstRPCError,
+		Message: fmt.Sprintf("from %s: %s (code %d)", url, msg, code),
 	}
 }
 
 func WrapSimCrash(err error, stderr string) error {
 	msg := stderr
 	if msg == "" && err != nil {
-		 msg = err.Error()
+		msg = err.Error()
 	}
 	return &ErstError{
-		 Code:    ErstSimCrash,
-		 Message: msg,
-		 OrigErr: err,
+		Code:    ErstSimCrash,
+		Message: msg,
+		OrigErr: err,
 	}
 }
 
 func WrapValidationError(msg string) error {
 	return &ErstError{
-		 Code:    ErstValidationFailed,
-		 Message: msg,
+		Code:    ErstValidationFailed,
+		Message: msg,
 	}
 }
 
 func WrapProtocolUnsupported(version uint32) error {
 	return &ErstError{
-		 Code:    ErstValidationFailed,
-		 Message: fmt.Sprintf("unsupported protocol version: %d", version),
+		Code:    ErstValidationFailed,
+		Message: fmt.Sprintf("unsupported protocol version: %d", version),
 	}
 }
 
 func WrapCliArgumentRequired(arg string) error {
 	return &ErstError{
-		 Code:    ErstValidationFailed,
-		 Message: "--" + arg,
+		Code:    ErstValidationFailed,
+		Message: "--" + arg,
 	}
 }
 
 func WrapAuditLogInvalid(msg string) error {
 	return &ErstError{
-		 Code:    ErstValidationFailed,
-		 Message: msg,
+		Code:    ErstValidationFailed,
+		Message: msg,
 	}
 }
 
 func WrapSessionNotFound(sessionID string) error {
 	return &ErstError{
-		 Code:    ErstValidationFailed,
-		 Message: sessionID,
+		Code:    ErstValidationFailed,
+		Message: sessionID,
 	}
 }
 
 func WrapUnauthorized(msg string) error {
 	if msg != "" {
-		 return &ErstError{
-			  Code:    ErstUnauthorized,
-			  Message: msg,
-		 }
+		return &ErstError{
+			Code:    ErstUnauthorized,
+			Message: msg,
+		}
 	}
 	return &ErstError{
-		 Code:    ErstUnauthorized,
-		 Message: "unauthorized",
+		Code:    ErstUnauthorized,
+		Message: "unauthorized",
 	}
 }
 
 func WrapLedgerNotFound(sequence uint32) error {
 	return &ErstError{
-		 Code:    ErstLedgerNotFound,
-		 Message: fmt.Sprintf("ledger %d not found (may be archived or not yet created)", sequence),
+		Code:    ErstLedgerNotFound,
+		Message: fmt.Sprintf("ledger %d not found (may be archived or not yet created)", sequence),
 	}
 }
 
 func WrapLedgerArchived(sequence uint32) error {
 	return &ErstError{
-		 Code:    ErstLedgerArchived,
-		 Message: fmt.Sprintf("ledger %d has been archived and is no longer available", sequence),
+		Code:    ErstLedgerArchived,
+		Message: fmt.Sprintf("ledger %d has been archived and is no longer available", sequence),
 	}
 }
 
 func WrapRateLimitExceeded() error {
 	return &ErstError{
-		 Code:    ErstRateLimitExceeded,
-		 Message: "rate limit exceeded, please try again later",
+		Code:    ErstRateLimitExceeded,
+		Message: "rate limit exceeded, please try again later",
 	}
 }
 
 func WrapConfigError(msg string, err error) error {
 	if err != nil {
-		 return &ErstError{
-			  Code:    ErstConfigFailed,
-			  Message: msg + ": " + err.Error(),
-			  OrigErr: err,
-		 }
+		return &ErstError{
+			Code:    ErstConfigFailed,
+			Message: msg + ": " + err.Error(),
+			OrigErr: err,
+		}
 	}
 	return &ErstError{
-		 Code:    ErstConfigFailed,
-		 Message: msg,
+		Code:    ErstConfigFailed,
+		Message: msg,
 	}
 }
 
 func WrapNetworkNotFound(network string) error {
 	return &ErstError{
-		 Code:    ErstNetworkNotFound,
-		 Message: network,
+		Code:    ErstNetworkNotFound,
+		Message: network,
 	}
 }
 
@@ -360,10 +360,6 @@ func WrapRPCRequestTooLarge(sizeBytes int64, maxSizeBytes int64) error {
 func WrapMissingLedgerKey(key string) error {
 	return &MissingLedgerKeyError{Key: key}
 }
-
-// ErstErrorCode is the canonical classification for all errors crossing
-// RPC and Simulator boundaries.
-type ErstErrorCode string
 
 const (
 	// RPC origin
@@ -417,48 +413,12 @@ var codeToSentinel = map[ErstErrorCode]error{
 	CodeValidationFailed:       ErrValidationFailed,
 }
 
-// ErstError is the unified error type returned at all RPC and Simulator boundaries.
-// It carries a stable ErstErrorCode for programmatic handling and preserves the
-// original error string in OriginalError for backwards compatibility.
-type ErstError struct {
-	Code          ErstErrorCode
-	Message       string // human-readable summary
-	OriginalError string // raw original error string, always preserved
-}
-
-func (e *ErstError) Error() string {
-	if e.OriginalError != "" {
-		return string(e.Code) + ": " + e.OriginalError
-	}
-	return string(e.Code) + ": " + e.Message
-}
-
-// Is allows errors.Is to match an ErstError against its corresponding sentinel
-// error via the codeToSentinel mapping.
-func (e *ErstError) Is(target error) bool {
-	if sentinel, ok := codeToSentinel[e.Code]; ok {
-		return target == sentinel
-	}
-	return false
-}
-
-// Unwrap returns nil because Is() handles sentinel matching directly.
-// The previous implementation created a fresh errors.New() on every call,
-// which broke errors.Is chains.
-func (e *ErstError) Unwrap() error {
-	return nil
-}
-
 // newErstError is the internal constructor.
 func newErstError(code ErstErrorCode, message string, original error) *ErstError {
-	orig := ""
-	if original != nil {
-		orig = original.Error()
+	if message == "" && original != nil {
+		message = original.Error()
 	}
-	if message == "" {
-		message = orig
-	}
-	return &ErstError{Code: code, Message: message, OriginalError: orig}
+	return &ErstError{Code: code, Message: message, OrigErr: original}
 }
 
 // --- Typed constructors for RPC boundary ---

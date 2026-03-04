@@ -49,9 +49,8 @@ type CachedEntry struct {
 }
 
 var (
-	cacheDB   *sql.DB
-	cacheOnce sync.Once
-	cacheMu   sync.Mutex
+	cacheDB *sql.DB
+	cacheMu sync.Mutex
 )
 
 // cacheSchema creates the rpc_cache table and indexes.
@@ -330,6 +329,8 @@ func CleanByFilter(f CleanFilter) (int, error) {
 	}
 
 	return int(removed), nil
+}
+
 // Flush finalizes pending cache writes.
 // Current cache writes are synchronous file writes, so this is a no-op.
 func Flush(ctx context.Context) error {

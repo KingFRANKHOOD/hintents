@@ -93,8 +93,8 @@ Example:
 		}
 		fmt.Printf("Identified target contract: %x\n", *contractID)
 
-		if err := injectNewCode(entries, *contractID, newWasmBytes); err != nil {
-			return errors.WrapSimulationLogicError(fmt.Sprintf("failed to inject new code: %v", err))
+		if injectErr := injectNewCode(entries, *contractID, newWasmBytes); injectErr != nil {
+			return errors.WrapSimulationLogicError(fmt.Sprintf("failed to inject new code: %v", injectErr))
 		}
 		fmt.Println("Injected new WASM code into simulation state.")
 

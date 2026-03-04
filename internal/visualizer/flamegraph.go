@@ -4,7 +4,6 @@
 package visualizer
 
 import (
-	"fmt"
 	"strings"
 )
 

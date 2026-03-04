@@ -1,3 +1,6 @@
+// Copyright 2025 Erst Users
+// SPDX-License-Identifier: Apache-2.0
+
 package cmd
 
 import (
@@ -9,15 +12,15 @@ import (
 
 	"github.com/dotandev/hintents/internal/errors"
 	"github.com/dotandev/hintents/internal/rpc"
+	"github.com/spf13/cobra"
 	"github.com/stellar/go-stellar-sdk/strkey"
 	"github.com/stellar/go-stellar-sdk/xdr"
-	"github.com/spf13/cobra"
 )
 
 const (
-	sandboxDefaultAmountXLM  uint64 = 10_000
-	sandboxStroopsPerXLM     uint64 = 10_000_000
-	sandboxDefaultStateFile         = "overrides/sandbox.json"
+	sandboxDefaultAmountXLM uint64 = 10_000
+	sandboxStroopsPerXLM    uint64 = 10_000_000
+	sandboxDefaultStateFile        = "overrides/sandbox.json"
 )
 
 var (
@@ -36,7 +39,8 @@ submits transactions on-chain.`,
 }
 
 // sandboxFundCmd implements:
-//   erst sandbox fund <account>
+//
+//	erst sandbox fund <account>
 //
 // It creates or updates a JSON override file with a synthetic native XLM
 // balance for the given account, suitable for use with local simulations.
@@ -190,4 +194,3 @@ func init() {
 	sandboxCmd.AddCommand(sandboxFundCmd)
 	rootCmd.AddCommand(sandboxCmd)
 }
-

@@ -17,9 +17,9 @@ const wasmTargetPath = "target/wasm32-unknown-unknown/release"
 // HashMismatchError is returned when the local WASM hash does not match
 // the expected on-chain hash.
 type HashMismatchError struct {
-	Path     string
-	Local    string
-	OnChain  string
+	Path    string
+	Local   string
+	OnChain string
 }
 
 func (e *HashMismatchError) Error() string {

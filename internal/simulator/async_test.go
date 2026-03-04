@@ -10,7 +10,7 @@ import (
 )
 
 func TestAsyncRunner_SubmitAndPoll(t *testing.T) {
-	mock := NewMockRunner(func(req *SimulationRequest) (*SimulationResponse, error) {
+	mock := NewMockRunner(func(ctx context.Context, req *SimulationRequest) (*SimulationResponse, error) {
 		return &SimulationResponse{
 			Status: "success",
 			Events: []string{"event1"},
@@ -48,7 +48,7 @@ func TestAsyncRunner_SubmitAndPoll(t *testing.T) {
 }
 
 func TestAsyncRunner_SubmitFailure(t *testing.T) {
-	mock := NewMockRunner(func(req *SimulationRequest) (*SimulationResponse, error) {
+	mock := NewMockRunner(func(ctx context.Context, req *SimulationRequest) (*SimulationResponse, error) {
 		return nil, &ValidationError{Field: "envelope_xdr", Message: "invalid"}
 	})
 
@@ -74,7 +74,7 @@ func TestAsyncRunner_SubmitFailure(t *testing.T) {
 }
 
 func TestAsyncRunner_Timeout(t *testing.T) {
-	mock := NewMockRunner(func(req *SimulationRequest) (*SimulationResponse, error) {
+	mock := NewMockRunner(func(ctx context.Context, req *SimulationRequest) (*SimulationResponse, error) {
 		time.Sleep(2 * time.Second)
 		return &SimulationResponse{Status: "success"}, nil
 	})
@@ -126,7 +126,7 @@ func TestAsyncRunner_PollNonExistent(t *testing.T) {
 }
 
 func TestAsyncRunner_ContextCancel(t *testing.T) {
-	mock := NewMockRunner(func(req *SimulationRequest) (*SimulationResponse, error) {
+	mock := NewMockRunner(func(ctx context.Context, req *SimulationRequest) (*SimulationResponse, error) {
 		time.Sleep(10 * time.Second)
 		return &SimulationResponse{Status: "success"}, nil
 	})

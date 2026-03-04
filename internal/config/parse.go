@@ -8,30 +8,52 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+
+	"github.com/dotandev/hintents/internal/errors"
 )
 
-func loadFromEnv() *Config {
-	cfg := &Config{
-		RpcUrl:         getEnv("ERST_RPC_URL", defaultConfig.RpcUrl),
-		Network:        Network(getEnv("ERST_NETWORK", string(defaultConfig.Network))),
-		SimulatorPath:  getEnv("ERST_SIMULATOR_PATH", defaultConfig.SimulatorPath),
-		LogLevel:       getEnv("ERST_LOG_LEVEL", defaultConfig.LogLevel),
-		CachePath:      getEnv("ERST_CACHE_PATH", defaultConfig.CachePath),
-		RPCToken:       getEnv("ERST_RPC_TOKEN", ""),
-		CrashEndpoint:  getEnv("ERST_CRASH_ENDPOINT", ""),
-		CrashSentryDSN: getEnv("ERST_SENTRY_DSN", ""),
-		RequestTimeout: defaultRequestTimeout,
+func loadFromEnv(cfg *Config) error {
+	if v := os.Getenv("ERST_RPC_URL"); v != "" {
+		cfg.RpcUrl = v
+	}
+	if v := os.Getenv("ERST_NETWORK"); v != "" {
+		cfg.Network = Network(v)
+	}
+	if v := os.Getenv("ERST_SIMULATOR_PATH"); v != "" {
+		cfg.SimulatorPath = v
+	}
+	if v := os.Getenv("ERST_LOG_LEVEL"); v != "" {
+		cfg.LogLevel = v
+	}
+	if v := os.Getenv("ERST_CACHE_PATH"); v != "" {
+		cfg.CachePath = v
+	}
+	if v := os.Getenv("ERST_RPC_TOKEN"); v != "" {
+		cfg.RPCToken = v
+	}
+	if v := os.Getenv("ERST_CRASH_ENDPOINT"); v != "" {
+		cfg.CrashEndpoint = v
+	}
+	if v := os.Getenv("ERST_SENTRY_DSN"); v != "" {
+		cfg.CrashSentryDSN = v
 	}
 
 	if v := os.Getenv("ERST_REQUEST_TIMEOUT"); v != "" {
-		if n, err := strconv.Atoi(v); err == nil && n > 0 {
-			cfg.RequestTimeout = n
+		n, err := strconv.Atoi(v)
+		if err != nil {
+			return errors.WrapValidationError("ERST_REQUEST_TIMEOUT must be an integer")
 		}
+		cfg.RequestTimeout = n
 	}
 
 	switch strings.ToLower(os.Getenv("ERST_CRASH_REPORTING")) {
+	case "":
 	case "1", "true", "yes":
 		cfg.CrashReporting = true
+	case "0", "false", "no":
+		cfg.CrashReporting = false
+	default:
+		return errors.WrapValidationError("ERST_CRASH_REPORTING must be a boolean")
 	}
 
 	if urlsEnv := os.Getenv("ERST_RPC_URLS"); urlsEnv != "" {
@@ -40,7 +62,7 @@ func loadFromEnv() *Config {
 		cfg.RpcUrls = splitAndTrim(urlsEnv)
 	}
 
-	return cfg
+	return nil
 }
 
 func splitAndTrim(s string) []string {
@@ -128,15 +150,24 @@ func (c *Config) parseTOML(content string) error {
 		case "rpc_token":
 			c.RPCToken = value
 		case "crash_reporting":
-			c.CrashReporting = value == "true" || value == "1" || value == "yes"
+			switch strings.ToLower(value) {
+			case "true", "1", "yes":
+				c.CrashReporting = true
+			case "false", "0", "no":
+				c.CrashReporting = false
+			default:
+				return errors.WrapValidationError("crash_reporting must be a boolean")
+			}
 		case "crash_endpoint":
 			c.CrashEndpoint = value
 		case "crash_sentry_dsn":
 			c.CrashSentryDSN = value
 		case "request_timeout":
-			if n, err := strconv.Atoi(value); err == nil && n > 0 {
-				c.RequestTimeout = n
+			n, err := strconv.Atoi(value)
+			if err != nil {
+				return errors.WrapValidationError("request_timeout must be an integer")
 			}
+			c.RequestTimeout = n
 		}
 	}
 
@@ -144,6 +175,9 @@ func (c *Config) parseTOML(content string) error {
 }
 
 func getEnv(key, defaultValue string) string {
+	if !strings.HasPrefix(key, "ERST_") {
+		return defaultValue
+	}
 	if value := os.Getenv(key); value != "" {
 		return value
 	}

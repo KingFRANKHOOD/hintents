@@ -18,10 +18,10 @@ import (
 
 // Global flag variables
 var (
-	TimestampFlag       int64
-	WindowFlag          int64
-	ProfileFlag         bool
-	ProfileFormatFlag   string
+	TimestampFlag     int64
+	WindowFlag        int64
+	ProfileFlag       bool
+	ProfileFormatFlag string
 )
 
 // rootCmd represents the base command when called without any subcommands

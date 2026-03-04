@@ -189,7 +189,6 @@ func formatBytes(bytes int64) string {
 	return fmt.Sprintf("%.2f %s", size, units[unitIndex])
 }
 
-
 var cacheCleanRPCCmd = &cobra.Command{
 	Use:   "clean",
 	Short: "Prune the local SQLite RPC fetch cache by date or network",

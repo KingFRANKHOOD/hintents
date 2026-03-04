@@ -262,10 +262,4 @@ func (b *clientBuilder) build() (*Client, error) {
 		lastFailure:     make(map[string]time.Time),
 		middlewares:     b.middlewares,
 	}, nil
-		CacheEnabled: b.cacheEnabled,
-		failures:     make(map[string]int),
-		lastFailure:  make(map[string]time.Time),
-		middlewares:  b.middlewares,
->>>>>>> 30c9dba (feat(rpc): standardize RPC client to use injected middlewares)
-	}, nil
 }

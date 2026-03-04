@@ -401,8 +401,8 @@ func TestInlinedFrame(t *testing.T) {
 			Column: 5,
 		},
 		InlinedAt: SourceLocation{
-			File:   "balance.rs",
-			Line:   10,
+			File: "balance.rs",
+			Line: 10,
 		},
 	}
 
@@ -424,8 +424,8 @@ func TestInlinedFrame(t *testing.T) {
 // inlined call chain section when TrapInfo.InlinedChain is populated.
 func TestFormatTrapInfo_WithInlinedChain(t *testing.T) {
 	trap := &TrapInfo{
-		Type:    TrapIndexOutOfBounds,
-		Message: "index out of bounds: len=5, index=10",
+		Type:     TrapIndexOutOfBounds,
+		Message:  "index out of bounds: len=5, index=10",
 		Function: "check_balance",
 		SourceLocation: &SourceLocation{
 			File: "balance.rs",
@@ -433,13 +433,13 @@ func TestFormatTrapInfo_WithInlinedChain(t *testing.T) {
 		},
 		InlinedChain: []InlinedFrame{
 			{
-				Function: "transfer",
-				CallSite: SourceLocation{File: "token.rs", Line: 55},
+				Function:  "transfer",
+				CallSite:  SourceLocation{File: "token.rs", Line: 55},
 				InlinedAt: SourceLocation{File: "balance.rs", Line: 10},
 			},
 			{
-				Function: "check_balance",
-				CallSite: SourceLocation{File: "balance.rs", Line: 10},
+				Function:  "check_balance",
+				CallSite:  SourceLocation{File: "balance.rs", Line: 10},
 				InlinedAt: SourceLocation{File: "balance.rs", Line: 22},
 			},
 		},
@@ -472,8 +472,8 @@ func TestFormatTrapInfo_WithInlinedChain(t *testing.T) {
 // the inlined chain section when InlinedChain is empty.
 func TestFormatTrapInfo_NoInlinedChain(t *testing.T) {
 	trap := &TrapInfo{
-		Type:    TrapPanic,
-		Message: "contract panicked",
+		Type:     TrapPanic,
+		Message:  "contract panicked",
 		Function: "transfer",
 	}
 

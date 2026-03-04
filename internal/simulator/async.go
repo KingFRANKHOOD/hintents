@@ -88,7 +88,7 @@ func (a *AsyncRunner) Submit(req *SimulationRequest) (string, error) {
 			return
 		}
 
-		resp, err := a.runner.Run(&simReq)
+		resp, err := a.runner.Run(context.Background(), &simReq)
 
 		a.mu.Lock()
 		t := time.Now()

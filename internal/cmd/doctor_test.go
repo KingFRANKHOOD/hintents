@@ -148,7 +148,7 @@ func TestCheckRPC(t *testing.T) {
 		"/": rpc.SuccessRoute(map[string]interface{}{
 			"jsonrpc": "2.0",
 			"id":      1,
-			"result": map[string]interface{}{"status": "healthy"},
+			"result":  map[string]interface{}{"status": "healthy"},
 		}),
 	})
 	defer rs.Close()

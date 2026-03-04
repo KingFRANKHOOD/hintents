@@ -6,19 +6,8 @@ package visualizer
 import (
 	"os"
 
+	"github.com/dotandev/hintents/internal/terminal"
 	"github.com/mattn/go-isatty"
-)
-
-// ANSI SGR (Select Graphic Rendition) escape codes for terminal colors.
-const (
-	sgrRed     = "\033[31m"
-	sgrGreen   = "\033[32m"
-	sgrYellow  = "\033[33m"
-	sgrBlue    = "\033[34m"
-	sgrMagenta = "\033[35m"
-	sgrCyan    = "\033[36m"
-	sgrBold    = "\033[1m"
-	sgrDim     = "\033[2m"
 )
 
 var defaultRenderer terminal.Renderer = terminal.NewANSIRenderer()
@@ -78,14 +67,6 @@ func ContractBoundary(fromContract, toContract string) string {
 	return sgrMagenta + sgrBold + line + sgrReset
 }
 
-// ContractBoundary returns a visual separator for cross-contract call transitions.
-func ContractBoundary(fromContract, toContract string) string {
-	if ColorEnabled() {
-		return sgrMagenta + sgrBold + "--- contract boundary: " + fromContract + " -> " + toContract + " ---" + sgrReset
-	}
-	return "--- contract boundary: " + fromContract + " -> " + toContract + " ---"
-}
-
 // Success returns a success indicator.
 func Success() string {
 	return defaultRenderer.Success()
@@ -104,13 +85,6 @@ func Error() string {
 // Info returns an info indicator.
 func Info() string {
 	return Colorize("[i]", "cyan")
-}
-
-// ContractBoundary returns a visual separator indicating a cross-contract
-// transition from fromContract to toContract.
-func ContractBoundary(fromContract, toContract string) string {
-	text := "--- contract boundary: " + fromContract + " -> " + toContract + " ---"
-	return Colorize(text, sgrMagenta+sgrBold)
 }
 
 // Symbol returns a symbol name rendered as ASCII markers.

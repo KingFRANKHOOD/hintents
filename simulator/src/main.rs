@@ -4,23 +4,15 @@
 #![allow(warnings, clippy::all, clippy::pedantic, clippy::nursery)]
 
 mod config;
-mod gas_optimizer;
-mod git_detector;
 mod runner;
-mod snapshot;
-mod source_map_cache;
-mod source_mapper;
-mod stack_trace;
-mod types;
 mod vm;
 mod wasm;
-mod wasm_types;
 
-use crate::gas_optimizer::{BudgetMetrics, GasOptimizationAdvisor, CPU_LIMIT, MEMORY_LIMIT};
-use crate::source_mapper::SourceMapper;
-use crate::stack_trace::WasmStackTrace;
-use crate::types::*;
 use base64::Engine as _;
+use simulator::gas_optimizer::{BudgetMetrics, GasOptimizationAdvisor, CPU_LIMIT, MEMORY_LIMIT};
+use simulator::source_mapper::SourceMapper;
+use simulator::stack_trace::WasmStackTrace;
+use simulator::types::*;
 use soroban_env_host::xdr::ReadXdr;
 use soroban_env_host::{
     xdr::{Operation, OperationBody},
@@ -462,12 +454,7 @@ fn main() {
                 if let Err(e) = vm::enforce_soroban_compatibility(&wasm_bytes) {
                     return send_error(format!("Strict VM enforcement failed: {}", e));
                 }
-                let mapper = if request.enable_coverage {
-                    SourceMapper::new_with_options(wasm_bytes, false)
-                } else {
-                    SourceMapper::new_with_options(wasm_bytes, false)
-                };
-
+                let mapper = SourceMapper::new_with_options(wasm_bytes, false);
                 if mapper.has_debug_symbols() {
                     eprintln!("Debug symbols found in WASM");
                     Some(mapper)
@@ -507,7 +494,7 @@ fn main() {
     // --- END: Local WASM Loading Integration ---
     // Populate Host Storage
     let snapshot = if let Some(entries) = &request.ledger_entries {
-        let snap = snapshot::LedgerSnapshot::new();
+        let snap = simulator::snapshot::LedgerSnapshot::new();
         for (key_xdr, entry_xdr) in entries {
             let _key = match base64::engine::general_purpose::STANDARD.decode(key_xdr) {
                 Ok(b) => match soroban_env_host::xdr::LedgerKey::from_xdr(
@@ -549,7 +536,7 @@ fn main() {
         }
         snap
     } else {
-        snapshot::LedgerSnapshot::new()
+        simulator::snapshot::LedgerSnapshot::new()
     };
 
     let loaded_entries_count = snapshot.len();
@@ -1299,7 +1286,7 @@ mod tests {
     /// and the `source_location` field stays absent in serialized JSON.
     #[test]
     fn test_source_mapper_no_symbols_gives_no_location() {
-        use crate::source_mapper::SourceMapper;
+        use simulator::source_mapper::SourceMapper;
 
         let wasm_bytes = vec![0x00, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00]; // WASM magic + version
         let mapper = SourceMapper::new_with_options(wasm_bytes, false);

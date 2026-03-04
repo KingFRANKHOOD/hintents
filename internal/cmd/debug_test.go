@@ -109,8 +109,8 @@ func TestLoadOverrideState_RealWorldExample(t *testing.T) {
 		t.Fatalf("failed to marshal test data: %v", err)
 	}
 
-	if err := os.WriteFile(tmpFile, data, 0644); err != nil {
-		t.Fatalf("failed to write test file: %v", err)
+	if writeErr := os.WriteFile(tmpFile, data, 0644); writeErr != nil {
+		t.Fatalf("failed to write test file: %v", writeErr)
 	}
 
 	entries, err := loadOverrideState(tmpFile)

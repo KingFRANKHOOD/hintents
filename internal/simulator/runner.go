@@ -7,7 +7,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"io"
 	"fmt"
 	"os"
 	"os/exec"
@@ -303,7 +302,7 @@ func (r *Runner) Run(ctx context.Context, req *SimulationRequest) (*SimulationRe
 		classified := (&ipc.Error{Code: resp.ErrorCode, Message: resp.Error}).ToErstError()
 		logger.Logger.Error("Simulator returned error",
 			"code", classified.Code,
-			"original", classified.OriginalError,
+			"original", classified.OrigErr,
 		)
 		return nil, classified
 	}
@@ -326,6 +325,8 @@ func (lb *limitedBuffer) Write(p []byte) (n int, err error) {
 		return len(p), nil
 	}
 	return lb.Buffer.Write(p)
+}
+
 func (r *Runner) Close() error {
 	r.mu.Lock()
 	if r.closed {

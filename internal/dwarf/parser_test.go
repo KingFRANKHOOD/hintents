@@ -233,8 +233,8 @@ func TestInlinedSubroutineInfo(t *testing.T) {
 			Column: 5,
 		},
 		InlinedLocation: SourceLocation{
-			File:   "balance.rs",
-			Line:   10,
+			File: "balance.rs",
+			Line: 10,
 		},
 		LowPC:  0x1000,
 		HighPC: 0x1100,

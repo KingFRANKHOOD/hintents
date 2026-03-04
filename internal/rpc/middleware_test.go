@@ -1,3 +1,6 @@
+// Copyright 2025 Erst Users
+// SPDX-License-Identifier: Apache-2.0
+
 package rpc
 
 import (
@@ -46,7 +49,7 @@ func TestMiddlewareInjection(t *testing.T) {
 	// Test a call that uses the HTTP client
 	ctx := context.Background()
 	resp, err := client.GetHealth(ctx)
-	
+
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
 	assert.Equal(t, "healthy", resp.Result.Status)
@@ -59,7 +62,7 @@ func BenchmarkMiddleware(b *testing.B) {
 	}
 
 	client, _ := NewClient(WithMiddleware(mw))
-	
+
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		// Just creating the client or doing something light

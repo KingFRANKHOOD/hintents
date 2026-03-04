@@ -1,8 +1,11 @@
+// Copyright 2025 Erst Users
+// SPDX-License-Identifier: Apache-2.0
 
 package integration
 
 import (
 	"bytes"
+	"context"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -83,7 +86,7 @@ func runErst(t *testing.T, args ...string) (stdout, stderr string, err error) {
 	return outBuf.String(), errBuf.String(), err
 }
 
-func timeoutCtx(t *testing.T, d time.Duration) (interface{ Done() <-chan struct{} }, func()) {
+func timeoutCtx(t *testing.T, d time.Duration) (context.Context, func()) {
 	t.Helper()
 
 	return buildTestContext(t, d)

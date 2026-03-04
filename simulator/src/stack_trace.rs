@@ -6,6 +6,8 @@
 //! Exposes the Wasmi internal call stack directly on traps,
 //! bypassing Soroban Host abstractions for low-level debugging.
 
+#![allow(dead_code)]
+
 use serde::Serialize;
 
 /// A single frame in a WASM call stack.

@@ -66,7 +66,6 @@ func TestInjectDarkMode_PreservesContent(t *testing.T) {
 	}
 }
 
-
 func TestGenerateInteractiveHTML_BasicGeneration(t *testing.T) {
 	svg := `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600">
 <rect x="0" y="0" width="100" height="20" fill="red"/>

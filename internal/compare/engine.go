@@ -129,7 +129,7 @@ func Diff(local, onChain *simulator.SimulationResponse) *DiffResult {
 	result.TotalEvents = total
 	result.DivergentEvents = div
 	result.IdenticalEvents = total - div
-	result.HasDivergence = result.StatusDiff.Match == false ||
+	result.HasDivergence = !result.StatusDiff.Match ||
 		div > 0 ||
 		len(result.CallPathDivergences) > 0
 

@@ -66,7 +66,7 @@ the preferred RPC URL and network passphrase.`,
 			return err
 		}
 
-		fmt.Fprintf(cmd.OutOrStdout(), "Initialized Erst project scaffold in %s\n", targetDir)
+		_, _ = fmt.Fprintf(cmd.OutOrStdout(), "Initialized Erst project scaffold in %s\n", targetDir) //nolint:errcheck
 		return nil
 	},
 }
@@ -95,8 +95,8 @@ func runInitWizard(cmd *cobra.Command, opts *initScaffoldOptions) error {
 	reader := bufio.NewReader(cmd.InOrStdin())
 	out := cmd.OutOrStdout()
 
-	fmt.Fprintln(out, "Erst init setup wizard")
-	fmt.Fprintln(out, "Press Enter to accept defaults.")
+	_, _ = fmt.Fprintln(out, "Erst init setup wizard")          //nolint:errcheck
+	_, _ = fmt.Fprintln(out, "Press Enter to accept defaults.") //nolint:errcheck
 
 	rpcURL, err := promptWithDefault(reader, out, "Preferred Soroban RPC URL", defaultRPCURLForNetwork(opts.Network, opts.RPCURL))
 	if err != nil {
@@ -114,7 +114,7 @@ func runInitWizard(cmd *cobra.Command, opts *initScaffoldOptions) error {
 }
 
 func promptWithDefault(reader *bufio.Reader, out io.Writer, prompt, defaultValue string) (string, error) {
-	fmt.Fprintf(out, "%s [%s]: ", prompt, defaultValue)
+	_, _ = fmt.Fprintf(out, "%s [%s]: ", prompt, defaultValue) //nolint:errcheck
 	input, err := reader.ReadString('\n')
 	if err != nil && !errors.Is(err, io.EOF) {
 		return "", err

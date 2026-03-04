@@ -1,3 +1,6 @@
+# Copyright 2025 Erst Users
+# SPDX-License-Identifier: Apache-2.0
+
 #!/bin/bash
 # Verification script for interactive flamegraph export feature
 

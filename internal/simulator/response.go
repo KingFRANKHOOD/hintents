@@ -8,6 +8,9 @@ import "github.com/dotandev/hintents/internal/authtrace"
 type SimulationResponse struct {
 	Status            string               `json:"status"`
 	Error             string               `json:"error,omitempty"`
+	ErrorCode         string               `json:"error_code,omitempty"`
+	LCOVReport        string               `json:"lcov_report,omitempty"`
+	LCOVReportPath    string               `json:"lcov_report_path,omitempty"`
 	Events            []string             `json:"events,omitempty"`
 	DiagnosticEvents  []DiagnosticEvent    `json:"diagnostic_events,omitempty"`
 	Logs              []string             `json:"logs,omitempty"`
@@ -19,6 +22,7 @@ type SimulationResponse struct {
 	StackTrace        *WasmStackTrace      `json:"stack_trace,omitempty"`
 	SourceLocation    string               `json:"source_location,omitempty"`
 	WasmOffset        *uint64              `json:"wasm_offset,omitempty"`
+	LinearMemoryDump  string               `json:"linear_memory_dump,omitempty"`
 }
 
 type BudgetUsage struct {

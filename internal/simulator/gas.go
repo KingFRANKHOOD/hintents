@@ -4,6 +4,7 @@
 package simulator
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/dotandev/hintents/internal/errors"
@@ -169,7 +170,7 @@ func EstimateGas(runner RunnerInterface, req *SimulationRequest) (*GasEstimation
 		return nil, errors.WrapValidationError("simulation request is nil")
 	}
 
-	resp, err := runner.Run(req)
+	resp, err := runner.Run(context.Background(), req)
 	if err != nil {
 		return nil, fmt.Errorf("simulation failed: %w", err)
 	}

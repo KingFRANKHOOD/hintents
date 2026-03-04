@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestRPCValidator_EmptyURL(t *testing.T) {
+func TestRPCValidator_EmptyURL_Validate(t *testing.T) {
 	cfg := &Config{RpcUrl: "", Network: NetworkTestnet, LogLevel: "info", RequestTimeout: 15}
 	err := RPCValidator{}.Validate(cfg)
 	if err == nil {
@@ -19,7 +19,7 @@ func TestRPCValidator_EmptyURL(t *testing.T) {
 	}
 }
 
-func TestRPCValidator_InvalidScheme(t *testing.T) {
+func TestRPCValidator_InvalidScheme_Validate(t *testing.T) {
 	cfg := &Config{RpcUrl: "ftp://bad.example.com", Network: NetworkTestnet, LogLevel: "info", RequestTimeout: 15}
 	err := RPCValidator{}.Validate(cfg)
 	if err == nil {
@@ -32,14 +32,14 @@ func TestRPCValidator_InvalidScheme(t *testing.T) {
 
 func TestRPCValidator_ValidHTTPS(t *testing.T) {
 	cfg := &Config{RpcUrl: "https://soroban-testnet.stellar.org"}
-	if err := RPCValidator{}.Validate(cfg); err != nil {
+	if err := (RPCValidator{}).Validate(cfg); err != nil {
 		t.Errorf("expected no error, got %v", err)
 	}
 }
 
 func TestRPCValidator_ValidHTTP(t *testing.T) {
 	cfg := &Config{RpcUrl: "http://localhost:8000"}
-	if err := RPCValidator{}.Validate(cfg); err != nil {
+	if err := (RPCValidator{}).Validate(cfg); err != nil {
 		t.Errorf("expected no error, got %v", err)
 	}
 }
@@ -50,7 +50,7 @@ func TestNetworkValidator_Invalid(t *testing.T) {
 	if err == nil {
 		t.Fatal("expected error for invalid network")
 	}
-	if !strings.Contains(err.Error(), "invalid network") {
+	if !strings.Contains(err.Error(), "INVALID_NETWORK") {
 		t.Errorf("unexpected error message: %v", err)
 	}
 }
@@ -58,15 +58,15 @@ func TestNetworkValidator_Invalid(t *testing.T) {
 func TestNetworkValidator_AllValid(t *testing.T) {
 	for _, net := range []Network{NetworkPublic, NetworkTestnet, NetworkFuturenet, NetworkStandalone} {
 		cfg := &Config{Network: net}
-		if err := NetworkValidator{}.Validate(cfg); err != nil {
+		if err := (NetworkValidator{}).Validate(cfg); err != nil {
 			t.Errorf("network %q should be valid: %v", net, err)
 		}
 	}
 }
 
-func TestNetworkValidator_EmptyAllowed(t *testing.T) {
+func TestNetworkValidator_EmptyAllowed_Validate(t *testing.T) {
 	cfg := &Config{Network: ""}
-	if err := NetworkValidator{}.Validate(cfg); err != nil {
+	if err := (NetworkValidator{}).Validate(cfg); err != nil {
 		t.Errorf("empty network should be allowed: %v", err)
 	}
 }
@@ -85,7 +85,7 @@ func TestLogLevelValidator_Invalid(t *testing.T) {
 func TestLogLevelValidator_AllValid(t *testing.T) {
 	for _, lvl := range []string{"trace", "debug", "info", "warn", "error"} {
 		cfg := &Config{LogLevel: lvl}
-		if err := LogLevelValidator{}.Validate(cfg); err != nil {
+		if err := (LogLevelValidator{}).Validate(cfg); err != nil {
 			t.Errorf("log level %q should be valid: %v", lvl, err)
 		}
 	}
@@ -93,7 +93,7 @@ func TestLogLevelValidator_AllValid(t *testing.T) {
 
 func TestLogLevelValidator_EmptyAllowed(t *testing.T) {
 	cfg := &Config{LogLevel: ""}
-	if err := LogLevelValidator{}.Validate(cfg); err != nil {
+	if err := (LogLevelValidator{}).Validate(cfg); err != nil {
 		t.Errorf("empty log level should be allowed: %v", err)
 	}
 }
@@ -131,7 +131,7 @@ func TestTimeoutValidator_TooLarge(t *testing.T) {
 func TestTimeoutValidator_ValidBounds(t *testing.T) {
 	for _, v := range []int{1, 15, 150, 300} {
 		cfg := &Config{RequestTimeout: v}
-		if err := TimeoutValidator{}.Validate(cfg); err != nil {
+		if err := (TimeoutValidator{}).Validate(cfg); err != nil {
 			t.Errorf("timeout %d should be valid: %v", v, err)
 		}
 	}
@@ -139,7 +139,7 @@ func TestTimeoutValidator_ValidBounds(t *testing.T) {
 
 func TestCrashReportingValidator_DisabledOK(t *testing.T) {
 	cfg := &Config{CrashReporting: false}
-	if err := CrashReportingValidator{}.Validate(cfg); err != nil {
+	if err := (CrashReportingValidator{}).Validate(cfg); err != nil {
 		t.Errorf("disabled crash reporting should pass: %v", err)
 	}
 }
@@ -157,14 +157,14 @@ func TestCrashReportingValidator_EnabledNoEndpoint(t *testing.T) {
 
 func TestCrashReportingValidator_EnabledWithEndpoint(t *testing.T) {
 	cfg := &Config{CrashReporting: true, CrashEndpoint: "https://crash.example.com"}
-	if err := CrashReportingValidator{}.Validate(cfg); err != nil {
+	if err := (CrashReportingValidator{}).Validate(cfg); err != nil {
 		t.Errorf("should pass with crash_endpoint set: %v", err)
 	}
 }
 
 func TestCrashReportingValidator_EnabledWithDSN(t *testing.T) {
 	cfg := &Config{CrashReporting: true, CrashSentryDSN: "https://key@sentry.io/1"}
-	if err := CrashReportingValidator{}.Validate(cfg); err != nil {
+	if err := (CrashReportingValidator{}).Validate(cfg); err != nil {
 		t.Errorf("should pass with valid sentry dsn: %v", err)
 	}
 }

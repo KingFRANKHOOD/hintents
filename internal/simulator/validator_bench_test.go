@@ -8,8 +8,6 @@ import (
 	"testing"
 )
 
-func uint32Ptr(u uint32) *uint32 { return &u }
-
 func BenchmarkValidateRequest(b *testing.B) {
 	validXDR := base64.StdEncoding.EncodeToString([]byte("valid xdr data"))
 	validator := NewValidator(false)

@@ -4,6 +4,7 @@
 package simulator
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"strings"
@@ -190,7 +191,7 @@ func TestGasEstimation_ThresholdHelpers(t *testing.T) {
 // ─── EstimateGas (with MockRunner) ───────────────────────────────────────────
 
 func TestEstimateGas_WithMockRunner(t *testing.T) {
-	mock := NewMockRunner(func(req *SimulationRequest) (*SimulationResponse, error) {
+	mock := NewMockRunner(func(ctx context.Context, req *SimulationRequest) (*SimulationResponse, error) {
 		return &SimulationResponse{
 			Status: "success",
 			BudgetUsage: &BudgetUsage{
@@ -245,7 +246,7 @@ func TestEstimateGas_NilRequest(t *testing.T) {
 }
 
 func TestEstimateGas_RunnerError(t *testing.T) {
-	mock := NewMockRunner(func(req *SimulationRequest) (*SimulationResponse, error) {
+	mock := NewMockRunner(func(ctx context.Context, req *SimulationRequest) (*SimulationResponse, error) {
 		return nil, fmt.Errorf("binary not found")
 	})
 

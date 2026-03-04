@@ -6,7 +6,6 @@ package config
 import (
 	"os"
 	"path/filepath"
-	"runtime"
 	"testing"
 
 	"github.com/dotandev/hintents/internal/rpc"

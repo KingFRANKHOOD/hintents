@@ -33,12 +33,12 @@ import (
 )
 
 const (
-	defaultIPFSNode      = "http://localhost:5001"
-	defaultArweaveGW     = "https://arweave.net"
-	defaultTimeout       = 30 * time.Second
-	envIPFSNode          = "ERST_IPFS_NODE"
-	envArweaveGateway    = "ERST_ARWEAVE_GATEWAY"
-	envArweaveWallet     = "ERST_ARWEAVE_WALLET"
+	defaultIPFSNode   = "http://localhost:5001"
+	defaultArweaveGW  = "https://arweave.net"
+	defaultTimeout    = 30 * time.Second
+	envIPFSNode       = "ERST_IPFS_NODE"
+	envArweaveGateway = "ERST_ARWEAVE_GATEWAY"
+	envArweaveWallet  = "ERST_ARWEAVE_WALLET"
 )
 
 // PublishConfig carries optional overrides for both backends.
@@ -172,16 +172,16 @@ func (p *Publisher) PublishIPFS(ctx context.Context, payload []byte) (Result, er
 // for now we build a best-effort unsigned transaction accepted by local nodes
 // and well-funded gateway POST endpoints (e.g. irys.xyz).
 type arweaveTx struct {
-	Format   int               `json:"format"`
-	LastTx   string            `json:"last_tx"`
-	Owner    string            `json:"owner"`
-	Tags     []arweaveTag      `json:"tags"`
-	Target   string            `json:"target"`
-	Quantity string            `json:"quantity"`
-	Data     []byte            `json:"data"`
-	Reward   string            `json:"reward"`
-	Signature string           `json:"signature"`
-	ID       string            `json:"id"`
+	Format    int          `json:"format"`
+	LastTx    string       `json:"last_tx"`
+	Owner     string       `json:"owner"`
+	Tags      []arweaveTag `json:"tags"`
+	Target    string       `json:"target"`
+	Quantity  string       `json:"quantity"`
+	Data      []byte       `json:"data"`
+	Reward    string       `json:"reward"`
+	Signature string       `json:"signature"`
+	ID        string       `json:"id"`
 }
 
 type arweaveTag struct {
@@ -214,13 +214,13 @@ func (p *Publisher) PublishArweave(ctx context.Context, payload []byte) (Result,
 	}
 
 	tx := arweaveTx{
-		Format:   2,
-		LastTx:   "",
-		Owner:    owner,
-		Target:   "",
-		Quantity: "0",
-		Data:     payload,
-		Reward:   "0",
+		Format:    2,
+		LastTx:    "",
+		Owner:     owner,
+		Target:    "",
+		Quantity:  "0",
+		Data:      payload,
+		Reward:    "0",
 		Signature: "",
 		Tags: []arweaveTag{
 			{Name: "Content-Type", Value: "application/json"},

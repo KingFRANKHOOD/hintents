@@ -3,7 +3,7 @@
 
 //! Tests for signature verification mocking functionality
 
-use crate::types::SimulationRequest;
+use simulator::types::SimulationRequest;
 
 #[test]
 fn test_signature_verification_mock_true() {
@@ -24,10 +24,11 @@ fn test_signature_verification_mock_true() {
         resource_calibration: None,
         memory_limit: None,
         restore_preamble: None,
+        include_linear_memory: false,
     };
 
     assert!(request.mock_signature_verification.is_some());
-    assert_eq!(request.mock_signature_verification.unwrap(), true);
+    assert!(request.mock_signature_verification.unwrap());
 }
 
 #[test]
@@ -49,10 +50,11 @@ fn test_signature_verification_mock_false() {
         resource_calibration: None,
         memory_limit: None,
         restore_preamble: None,
+        include_linear_memory: false,
     };
 
     assert!(request.mock_signature_verification.is_some());
-    assert_eq!(request.mock_signature_verification.unwrap(), false);
+    assert!(!request.mock_signature_verification.unwrap());
 }
 
 #[test]
@@ -74,6 +76,7 @@ fn test_signature_verification_mock_disabled() {
         resource_calibration: None,
         memory_limit: None,
         restore_preamble: None,
+        include_linear_memory: false,
     };
 
     assert!(request.mock_signature_verification.is_none());

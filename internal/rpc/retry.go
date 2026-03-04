@@ -6,7 +6,6 @@ package rpc
 import (
 	"context"
 	"fmt"
-	"math"
 	"math/rand"
 	"net/http"
 	"strconv"

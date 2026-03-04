@@ -150,13 +150,13 @@ func TestErstError_Is_UnknownCodeMatchesNothing(t *testing.T) {
 	assert.False(t, errors.Is(erstErr, ErrSimulationFailed))
 }
 
-func TestErstError_Unwrap_ReturnsNil(t *testing.T) {
-	erstErr := NewSimError(CodeSimCrash, fmt.Errorf("crash"))
-	assert.Nil(t, erstErr.Unwrap(), "Unwrap should return nil; Is() handles matching")
+func TestErstError_Unwrap_ReturnsOrigErr(t *testing.T) {
+	origErr := fmt.Errorf("crash")
+	erstErr := NewSimError(CodeSimCrash, origErr)
+	assert.Equal(t, origErr, erstErr.Unwrap(), "Unwrap should return the original error")
 }
 
 func TestShellExitSentinel(t *testing.T) {
 	assert.True(t, errors.Is(ErrShellExit, ErrShellExit))
 	assert.False(t, errors.Is(ErrShellExit, ErrRPCConnectionFailed))
 }
-

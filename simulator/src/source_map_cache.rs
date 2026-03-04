@@ -15,7 +15,7 @@ use sha2::{Digest, Sha256};
 use std::collections::HashMap;
 use std::fs::{self, File};
 use std::io::{Read, Write};
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 // Inline OS-level advisory file locking using libc, which is a transitive
 // dependency of soroban-env-host. This avoids adding a new crate while still
@@ -134,8 +134,8 @@ impl SourceMapCache {
     }
 
     /// Gets the advisory lock file path for a given cache path.
-    fn get_lock_path(cache_path: &PathBuf) -> PathBuf {
-        let mut p = cache_path.clone();
+    fn get_lock_path(cache_path: &Path) -> PathBuf {
+        let mut p = cache_path.to_path_buf();
         let file_name = p
             .file_name()
             .map(|n| format!("{}.lock", n.to_string_lossy()))
@@ -146,10 +146,11 @@ impl SourceMapCache {
 
     /// Opens or creates the advisory lock file for a cache path,
     /// returning the file handle (lock is held until the file is dropped/closed).
-    fn open_lock_file(cache_path: &PathBuf) -> Result<File, String> {
+    fn open_lock_file(cache_path: &Path) -> Result<File, String> {
         let lock_path = Self::get_lock_path(cache_path);
         File::options()
             .create(true)
+            .truncate(true)
             .read(true)
             .write(true)
             .open(&lock_path)
@@ -350,7 +351,7 @@ impl SourceMapCache {
     }
 
     /// Returns the cache directory path
-    pub fn get_cache_dir(&self) -> &PathBuf {
+    pub fn get_cache_dir(&self) -> &Path {
         &self.cache_dir
     }
 }

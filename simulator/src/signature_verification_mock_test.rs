@@ -3,7 +3,7 @@
 
 //! Tests for signature verification mocking functionality
 
-use crate::types::SimulationRequest;
+use simulator::types::SimulationRequest;
 
 #[test]
 fn test_signature_verification_mock_true() {

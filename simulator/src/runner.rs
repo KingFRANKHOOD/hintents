@@ -20,7 +20,7 @@ impl SimHost {
     /// Initialize a new Host with optional budget settings and resource calibration.
     pub fn new(
         budget_limits: Option<(u64, u64)>,
-        calibration: Option<crate::types::ResourceCalibration>,
+        calibration: Option<simulator::types::ResourceCalibration>,
         memory_limit: Option<u64>,
     ) -> Self {
         let budget = Budget::default();

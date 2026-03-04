@@ -9,8 +9,6 @@ import (
 	"github.com/dotandev/hintents/internal/simulator"
 )
 
-func strp(s string) *string { return &s }
-
 func makeResponse(events []simulator.CategorizedEvent) *simulator.SimulationResponse {
 	return &simulator.SimulationResponse{
 		Status:            "success",
