@@ -89,7 +89,7 @@
     },
     "devDependencies": {
         "@types/vscode": "^1.90.0",
-        "@types/node": "^20.0.0",
+        "@types/node": "^25.3.5",
         "@typescript-eslint/eslint-plugin": "^7.0.0",
         "@typescript-eslint/parser": "^7.0.0",
         "eslint": "^8.0.0",
@@ -111,7 +111,7 @@
   },
   "devDependencies": {
     "@types/vscode": "^1.90.0",
-    "@types/node": "^20.0.0",
+    "@types/node": "^25.3.5",
     "@typescript-eslint/eslint-plugin": "^7.0.0",
     "@typescript-eslint/parser": "^7.0.0",
     "eslint": "^8.0.0",
