@@ -1,10 +1,10 @@
 module github.com/dotandev/hintents
 
-go 1.24.0
+go 1.25.0
 
 require (
 	github.com/atotto/clipboard v0.1.4
-	github.com/fatih/color v1.18.0
+	github.com/fatih/color v1.19.0
 	github.com/getsentry/sentry-go v0.31.1
 	github.com/google/pprof v0.0.0-20250317173921-a4b03ec1a45e
 	github.com/gorilla/rpc v1.2.1
@@ -38,7 +38,7 @@ require (
 	github.com/klauspost/compress v1.18.0 // indirect
 	github.com/kylelemons/godebug v1.1.0 // indirect
 	github.com/manucorporat/sse v0.0.0-20160126180136-ee05b128a739 // indirect
-	github.com/mattn/go-colorable v0.1.13 // indirect
+	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/ncruces/go-strftime v1.0.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
@@ -59,7 +59,7 @@ require (
 	go.yaml.in/yaml/v2 v2.4.2 // indirect
 	golang.org/x/exp v0.0.0-20251023183803-a4bb9ffd2546 // indirect
 	golang.org/x/net v0.47.0 // indirect
-	golang.org/x/sys v0.38.0 // indirect
+	golang.org/x/sys v0.42.0 // indirect
 	golang.org/x/text v0.31.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20250929231259-57b25ae835d4 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250929231259-57b25ae835d4 // indirect
