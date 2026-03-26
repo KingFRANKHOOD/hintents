@@ -480,6 +480,12 @@ Local WASM Replay Mode:
 					return errors.WrapSimulationFailed(err, "")
 				}
 				printSimulationResult(networkFlag, simResp)
+				if diffSummary, diffErr := summarizeLedgerEntryDiffs(resp.ResultMetaXdr, ledgerEntries); diffErr != nil {
+					fmt.Printf("\n=== Ledger State Diff (re-simulated) ===\n")
+					fmt.Printf("Unable to compute ledger diff: %v\n", diffErr)
+				} else {
+					fmt.Print(renderLedgerDiffSummary(diffSummary))
+				}
 				// Fetch contract bytecode on demand for any contract calls in the trace; cache via RPC client
 				if client != nil && simResp != nil && len(simResp.DiagnosticEvents) > 0 {
 					contractIDs := collectContractIDsFromDiagnosticEvents(simResp.DiagnosticEvents)
