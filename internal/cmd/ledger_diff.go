@@ -55,7 +55,7 @@ func summarizeLedgerEntryDiffs(resultMetaXDR string, beforeState map[string]stri
 	current := cloneLedgerEntryMap(beforeEntries)
 	transitions := make(map[string]*stateTransition)
 
-	applyMutatingChanges := func(changes xdr.LedgerEntryChanges) {
+	applyMutatingChanges := func(changes xdr.LedgerEntryChanges) error {
 		for _, change := range changes {
 			switch change.Type {
 			case xdr.LedgerEntryChangeTypeLedgerEntryCreated:
@@ -64,11 +64,12 @@ func summarizeLedgerEntryDiffs(resultMetaXDR string, beforeState map[string]stri
 				}
 				key, err := encodeLedgerKeyFromEntry(*change.Created)
 				if err != nil {
-					continue
+					return fmt.Errorf("encode created ledger key: %w", err)
 				}
 				recordTransition(transitions, current, key)
-				current[key] = cloneLedgerEntry(*change.Created)
-				transitions[key].after = cloneLedgerEntry(*change.Created)
+				cloned := cloneLedgerEntry(*change.Created)
+				current[key] = cloned
+				transitions[key].after = &cloned
 
 			case xdr.LedgerEntryChangeTypeLedgerEntryUpdated:
 				if change.Updated == nil {
@@ -76,11 +77,12 @@ func summarizeLedgerEntryDiffs(resultMetaXDR string, beforeState map[string]stri
 				}
 				key, err := encodeLedgerKeyFromEntry(*change.Updated)
 				if err != nil {
-					continue
+					return fmt.Errorf("encode updated ledger key: %w", err)
 				}
 				recordTransition(transitions, current, key)
-				current[key] = cloneLedgerEntry(*change.Updated)
-				transitions[key].after = cloneLedgerEntry(*change.Updated)
+				cloned := cloneLedgerEntry(*change.Updated)
+				current[key] = cloned
+				transitions[key].after = &cloned
 
 			case xdr.LedgerEntryChangeTypeLedgerEntryRemoved:
 				if change.Removed == nil {
@@ -88,7 +90,7 @@ func summarizeLedgerEntryDiffs(resultMetaXDR string, beforeState map[string]stri
 				}
 				key, err := encodeLedgerKey(*change.Removed)
 				if err != nil {
-					continue
+					return fmt.Errorf("encode removed ledger key: %w", err)
 				}
 				recordTransition(transitions, current, key)
 				delete(current, key)
@@ -102,45 +104,66 @@ func summarizeLedgerEntryDiffs(resultMetaXDR string, beforeState map[string]stri
 				}
 				key, err := encodeLedgerKeyFromEntry(*change.State)
 				if err != nil {
-					continue
+					return fmt.Errorf("encode state ledger key: %w", err)
 				}
 				if _, exists := current[key]; !exists {
 					current[key] = cloneLedgerEntry(*change.State)
 				}
 			}
 		}
+		return nil
 	}
 
-	applyMutatingChanges(meta.FeeProcessing)
+	if err := applyMutatingChanges(meta.FeeProcessing); err != nil {
+		return nil, err
+	}
 
 	switch meta.TxApplyProcessing.V {
 	case 0:
 		if meta.TxApplyProcessing.Operations != nil {
 			for _, op := range *meta.TxApplyProcessing.Operations {
-				applyMutatingChanges(op.Changes)
+				if err := applyMutatingChanges(op.Changes); err != nil {
+					return nil, err
+				}
 			}
 		}
 	case 1:
 		if v1 := meta.TxApplyProcessing.V1; v1 != nil {
-			applyMutatingChanges(v1.TxChanges)
+			if err := applyMutatingChanges(v1.TxChanges); err != nil {
+				return nil, err
+			}
 			for _, op := range v1.Operations {
-				applyMutatingChanges(op.Changes)
+				if err := applyMutatingChanges(op.Changes); err != nil {
+					return nil, err
+				}
 			}
 		}
 	case 2:
 		if v2 := meta.TxApplyProcessing.V2; v2 != nil {
-			applyMutatingChanges(v2.TxChangesBefore)
-			applyMutatingChanges(v2.TxChangesAfter)
+			if err := applyMutatingChanges(v2.TxChangesBefore); err != nil {
+				return nil, err
+			}
+			if err := applyMutatingChanges(v2.TxChangesAfter); err != nil {
+				return nil, err
+			}
 			for _, op := range v2.Operations {
-				applyMutatingChanges(op.Changes)
+				if err := applyMutatingChanges(op.Changes); err != nil {
+					return nil, err
+				}
 			}
 		}
 	case 3:
 		if v3 := meta.TxApplyProcessing.V3; v3 != nil {
-			applyMutatingChanges(v3.TxChangesBefore)
-			applyMutatingChanges(v3.TxChangesAfter)
+			if err := applyMutatingChanges(v3.TxChangesBefore); err != nil {
+				return nil, err
+			}
+			if err := applyMutatingChanges(v3.TxChangesAfter); err != nil {
+				return nil, err
+			}
 			for _, op := range v3.Operations {
-				applyMutatingChanges(op.Changes)
+				if err := applyMutatingChanges(op.Changes); err != nil {
+					return nil, err
+				}
 			}
 		}
 	}
