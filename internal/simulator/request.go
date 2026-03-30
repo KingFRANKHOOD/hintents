@@ -10,6 +10,7 @@ type SimulationRequest struct {
 	Timestamp        int64             `json:"timestamp,omitempty"`
 	LedgerSequence   uint32            `json:"ledger_sequence,omitempty"`
 	WasmPath         *string           `json:"wasm_path,omitempty"`
+	NoCache          bool              `json:"no_cache,omitempty"`
 	MockArgs         *[]string         `json:"mock_args,omitempty"`
 	Profile          bool              `json:"profile,omitempty"`
 	ProtocolVersion  *uint32           `json:"protocol_version,omitempty"`
@@ -18,6 +19,7 @@ type SimulationRequest struct {
 	MemoryLimit      *uint64           `json:"memory_limit,omitempty"`
 	EnableCoverage   bool              `json:"enable_coverage,omitempty"`
 	CoverageLCOVPath *string           `json:"coverage_lcov_path,omitempty"`
+	EnableSnapshots  bool              `json:"enable_snapshots"`
 
 	RestorePreamble map[string]interface{} `json:"restore_preamble,omitempty"`
 

@@ -8,6 +8,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"io"
 	"log/slog"
 	"net/http"
 	"net/http/httptest"
@@ -20,6 +21,19 @@ import (
 
 type headerMiddleware struct {
 	next http.RoundTripper
+}
+
+type trackingReadCloser struct {
+	closed bool
+}
+
+func (t *trackingReadCloser) Read(_ []byte) (int, error) {
+	return 0, io.EOF
+}
+
+func (t *trackingReadCloser) Close() error {
+	t.closed = true
+	return nil
 }
 
 func (m *headerMiddleware) RoundTrip(req *http.Request) (*http.Response, error) {
@@ -167,6 +181,49 @@ func TestLoggingMiddleware_FailedRequest(t *testing.T) {
 			found = true
 			assert.Equal(t, "ERROR", entry["level"])
 			assert.NotEmpty(t, entry["error"])
+			break
+		}
+	}
+	assert.True(t, found, "expected 'http request failed' log entry")
+}
+
+// TestLoggingMiddleware_FailedRequestWithResponse ensures we preserve the
+// transport response while closing its body when an error is returned.
+func TestLoggingMiddleware_FailedRequestWithResponse(t *testing.T) {
+	var buf bytes.Buffer
+	restore := redirectLogger(&buf)
+	defer restore()
+
+	body := &trackingReadCloser{}
+	errTransport := RoundTripperFunc(func(_ *http.Request) (*http.Response, error) {
+		return &http.Response{
+			StatusCode: http.StatusBadGateway,
+			Body:       body,
+		}, errors.New("upstream failure")
+	})
+
+	lmw := NewLoggingMiddleware()
+	transport := lmw(errTransport)
+
+	req, _ := http.NewRequest(http.MethodGet, "http://example.invalid/rpc", nil)
+	resp, err := transport.RoundTrip(req)
+
+	assert.Error(t, err)
+	assert.NotNil(t, resp)
+	assert.Equal(t, http.StatusBadGateway, resp.StatusCode)
+	assert.True(t, body.closed, "expected response body to be closed on error")
+
+	require.NotEmpty(t, buf.String(), "expected at least one log line")
+
+	found := false
+	for _, line := range bytes.Split(bytes.TrimSpace(buf.Bytes()), []byte("\n")) {
+		var entry map[string]any
+		if jsonErr := json.Unmarshal(line, &entry); jsonErr != nil {
+			continue
+		}
+		if entry["msg"] == "http request failed" {
+			found = true
+			assert.Equal(t, float64(http.StatusBadGateway), entry["status"])
 			break
 		}
 	}
